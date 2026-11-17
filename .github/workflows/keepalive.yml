@@ -1,0 +1,16 @@
+name: Keepalive
+on:
+  schedule:
+    - cron: '0 0 */15 * *' # 每15天跑一次检测，不用天天跑
+  workflow_dispatch: # 支持手动点运行
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keepalive Workflow
+        uses: gautamkrishnar/keepalive-workflow@v2
+        with:
+          # 超过45天无提交，自动生成空提交
+          commit_message: "keepalive: 保活，防止定时workflow被60天规则禁用"
