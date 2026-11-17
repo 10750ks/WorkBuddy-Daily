@@ -5,14 +5,19 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # 关键！给仓库写入权限，才能生成空提交
+  contents: write
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Keepalive Workflow
-        uses: gautamkrishnar/keepalive-workflow@v2
+      - name: 拉取代码
+        uses: actions/checkout@v4
         with:
-          commit_message: "keepalive: 保活，防止定时workflow被60天规则禁用"
+          fetch-depth: 0
+      - name: 生成空提交保活
+        run: |
+          git config --global user.name "10750ks"
+          git config --global user.email "10750ks@users.noreply.github.com"
+          git commit --allow-empty -m "keepalive: 保活重置60天计时器"
+          git push
